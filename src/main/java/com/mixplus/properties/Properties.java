@@ -39,16 +39,16 @@ public class Properties {
 
     }
 
-    public String getString(String key, String Default) {
-        return data.getOrDefault(key, Default);
+    public String getString(String key, String defaultValue) {
+        return data.getOrDefault(key, defaultValue);
     }
 
-    public int getInt(String key, int Default) {
-        return Integer.parseInt(data.getOrDefault(key, String.valueOf(Default)));
+    public int getInt(String key, int defaultValue) {
+        return Integer.parseInt(data.getOrDefault(key, String.valueOf(defaultValue)));
     }
 
-    public boolean getBoolean(String key, boolean Default) {
-        return Boolean.parseBoolean(data.getOrDefault(key, String.valueOf(Default)));
+    public boolean getBoolean(String key, boolean defaultValue) {
+        return Boolean.parseBoolean(data.getOrDefault(key, String.valueOf(defaultValue)));
     }
 
     public void set(String key, Object value) {

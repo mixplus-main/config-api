@@ -1,86 +1,115 @@
 package com.mixplus;
 
+import com.mixplus.json.Json;
 import com.mixplus.properties.Properties;
 
 
 import java.io.IOException;
+import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Config {
+    private static final Logger logger = Logger.getLogger(Config.class.getName());
     private final String path;
     private final FileType fileType;
 
     private Properties properties;
+    private Json json;
 
     public static void main(String[] args) {}
+
 
     public Config(String path, FileType fileType) {
         this.path = path;
         this.fileType = fileType;
 
         switch (fileType) {
-            case PROPERTIES -> {
-                properties = new Properties(this.path);
-            }
-            case JSON -> {}
+            case PROPERTIES -> properties = new Properties(this.path);
+
+            case JSON -> json = new Json(this.path);
+
         }
     }
+
 
     public void load() throws IOException {
         switch (fileType) {
-            case PROPERTIES -> {
-                properties.load();
-            }
-            case JSON -> {}
+            case PROPERTIES -> properties.load();
+            case JSON -> json.load();
         }
     }
 
-    public String getString(String key, String Default) {
+
+    public String getString(String key, String defaultValue) {
         switch (fileType) {
             case PROPERTIES -> {
-                return properties.getString(key, Default);
+                return properties.getString(key, defaultValue);
             }
             case JSON -> {
-                return "JSON";
+                return json.getString(key, defaultValue);
             }
             case INI -> {
                 return "INI";
             }
         }
-        return Default;
+        return defaultValue;
     }
 
-    public int getInt(String key, int Default) {
+
+    public int getInt(String key, int defaultValue) {
         switch (fileType) {
             case PROPERTIES -> {
-                return properties.getInt(key, Default);
+                return properties.getInt(key, defaultValue);
             }
-            case INI -> {}
+            case JSON -> {
+                return json.getInt(key, defaultValue);
+            }
         }
-        return Default;
+        return defaultValue;
     }
 
-    public boolean getBoolean(String key, boolean Default) {
+
+    public boolean getBoolean(String key, boolean defaultValue) {
         switch (fileType) {
             case PROPERTIES -> {
-                return properties.getBoolean(key, Default);
+                return properties.getBoolean(key, defaultValue);
             }
-            case INI -> {}
+            case JSON -> {
+                return json.getBoolean(key, defaultValue);
+            }
         }
-        return Default;
+        return defaultValue;
     }
+
 
     public void set(String key, Object value) {
         switch (fileType) {
-            case PROPERTIES -> {
-                properties.set(key, value);
-            }
-            case INI -> {}
+            case PROPERTIES -> properties.set(key, value);
+
+            case JSON -> json.set(key, value);
         }
     }
 
     public void save() throws IOException {
-        properties.save();
+        switch (fileType) {
+            case PROPERTIES -> properties.save();
+
+            case JSON -> json.save();
+        }
+    }
+
+    public void createFile() {
+        File file = new File(path);
+
+        if (!file.exists()) {
+            try {
+                boolean cf = file.createNewFile();
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, "Failed to create file", e);
+            }
+        }
     }
 
     public String getPath() {return path; }
