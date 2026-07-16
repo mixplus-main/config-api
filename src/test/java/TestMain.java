@@ -3,6 +3,7 @@ import com.mixplus.Config;
 import com.mixplus.FileType;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class TestMain {
 
@@ -15,15 +16,11 @@ public class TestMain {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        for (int i = 0; i < 50; i++) {
-            config.set("I" + i, i);
-        }
+        Map<String, Object> server = config.getMap("server");
+        System.out.println(server);
 
-        try {
-            config.save();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("name: " + server.get("name"));
+        System.out.println("port: " + server.get("port"));
     }
 
 }

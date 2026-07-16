@@ -66,6 +66,23 @@ public class Json {
         return (Boolean) value;
     }
 
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getMap(String key) {
+        Object value = data.get(key);
+
+        if (value == null) {
+            return new HashMap<>();
+        }
+
+        if (!(value instanceof Map<?, ?> map)) {
+            throw new IllegalArgumentException(
+                    "Key '" + key + "' is not a Map."
+            );
+        }
+
+        return (Map<String, Object>) map;
+    }
+
     public void set(String key, Object value) {
         data.put(key, value);
     }

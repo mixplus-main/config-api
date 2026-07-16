@@ -6,6 +6,8 @@ import com.mixplus.properties.Properties;
 
 import java.io.IOException;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -81,6 +83,18 @@ public class Config {
             }
         }
         return defaultValue;
+    }
+
+    public Map<String, Object> getMap(String key) {
+        switch (fileType) {
+            case PROPERTIES -> {
+
+            }
+            case JSON -> {
+                return json.getMap(key);
+            }
+        }
+        return null;
     }
 
 
