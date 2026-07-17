@@ -4,6 +4,7 @@ package com.mixplus.json;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.ToNumberPolicy;
 
 import java.io.FileWriter;
 import java.util.logging.Level;
@@ -18,6 +19,7 @@ public class Json {
     private final  String path;
     private final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
+            .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
             .create();
     private Map<String, Object> data = new HashMap<>();
     private static final Logger logger = Logger.getLogger(Json.class.getName());
