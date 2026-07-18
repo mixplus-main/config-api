@@ -86,23 +86,13 @@ public class Json {
     }
 
 
-    @SuppressWarnings("unchecked")
     public void set(String path, Object value) {
         String[] keys = path.split("\\.");
 
         Map<String, Object> current = data;
 
-
         for (int i = 0; i < keys.length - 1; i++) {
-            Object next = current.get(keys[i]);
-
-            if (!(next instanceof Map<?, ?>)) {
-                throw new IllegalArgumentException(
-                        "Path '" + keys[i] + "' is not a Map."
-                );
-            }
-
-            current = (Map<String, Object>) next;
+            current = getOrCreateMap(current, keys[i]);
         }
 
         current.put(keys[keys.length - 1], value);
@@ -114,5 +104,27 @@ public class Json {
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Failed to save json", e);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> getOrCreateMap(
+            Map<String, Object> parent,
+            String key
+    ) {
+        Object value = parent.get(key);
+
+        if (value == null) {
+            Map<String, Object> map = new HashMap<>();
+            parent.put(key, map);
+            return map;
+        }
+
+        if (!(value instanceof Map<?, ?>)) {
+            throw new IllegalArgumentException(
+                    "Path '" + key + "' is not a Map."
+            );
+        }
+
+        return (Map<String, Object>) value;
     }
 }
