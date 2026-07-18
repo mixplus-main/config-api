@@ -52,6 +52,7 @@ public class Properties {
     }
 
     public void set(String key, Object value) {
+
         data.put(key, String.valueOf(value));
     }
 

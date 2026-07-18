@@ -85,8 +85,27 @@ public class Json {
         return (Map<String, Object>) map;
     }
 
-    public void set(String key, Object value) {
-        data.put(key, value);
+
+    @SuppressWarnings("unchecked")
+    public void set(String path, Object value) {
+        String[] keys = path.split("\\.");
+
+        Map<String, Object> current = data;
+
+
+        for (int i = 0; i < keys.length - 1; i++) {
+            Object next = current.get(keys[i]);
+
+            if (!(next instanceof Map<?, ?>)) {
+                throw new IllegalArgumentException(
+                        "Path '" + keys[i] + "' is not a Map."
+                );
+            }
+
+            current = (Map<String, Object>) next;
+        }
+
+        current.put(keys[keys.length - 1], value);
     }
 
     public void save() {
